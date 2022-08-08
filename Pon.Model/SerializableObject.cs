@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericXmlSerializer
+namespace Pon.Model
 {
-    public class ObjetoSerializable
+    public class SerializableObject
     {
         public decimal CUIT { get; set; }
         public string cuentas { get; set; }

@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.489
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericXmlSerializer", "GenericXmlSerializer\GenericXmlSerializer.csproj", "{9C1DA58B-E382-4F35-BFA9-17B9A7E5C9CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pon.GenericXmlSerializer", "Pon.GenericXmlSerializer\Pon.GenericXmlSerializer.csproj", "{D71DC455-055C-4C78-9857-710EB8347622}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pon.TestConsole", "Pon.TestConsole\Pon.TestConsole.csproj", "{19EFF816-2BDB-448D-87C4-9E3A586A2C25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pon.Model", "Pon.Model\Pon.Model.csproj", "{552F5381-411D-4B4D-82DE-5955437187DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9C1DA58B-E382-4F35-BFA9-17B9A7E5C9CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C1DA58B-E382-4F35-BFA9-17B9A7E5C9CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C1DA58B-E382-4F35-BFA9-17B9A7E5C9CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C1DA58B-E382-4F35-BFA9-17B9A7E5C9CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D71DC455-055C-4C78-9857-710EB8347622}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D71DC455-055C-4C78-9857-710EB8347622}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D71DC455-055C-4C78-9857-710EB8347622}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D71DC455-055C-4C78-9857-710EB8347622}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19EFF816-2BDB-448D-87C4-9E3A586A2C25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19EFF816-2BDB-448D-87C4-9E3A586A2C25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19EFF816-2BDB-448D-87C4-9E3A586A2C25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19EFF816-2BDB-448D-87C4-9E3A586A2C25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{552F5381-411D-4B4D-82DE-5955437187DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{552F5381-411D-4B4D-82DE-5955437187DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{552F5381-411D-4B4D-82DE-5955437187DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{552F5381-411D-4B4D-82DE-5955437187DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
