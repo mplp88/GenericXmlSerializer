@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using Pon.GenericXmlSerializer.Exceptions;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -13,25 +12,28 @@ namespace Pon.GenericXmlSerializer
         /// <typeparam name="T">Generic type of the object</typeparam>
         /// <param name="objectToSerialize">The object to serialize</param>
         /// <returns>returns XmlDocument of the object</returns>
-        public static XmlDocument SerializeToXml<T>(this T objectToSerialize)
+        public static XmlDocument ToXmlDocument<T>(this T objectToSerialize)
         {
-            var document = new XmlDocument();
-            var ser = new XmlSerializer(objectToSerialize.GetType());
+            if (objectToSerialize is null)
+            {
+                throw new ArgumentNullException(nameof(objectToSerialize));
+            }
+
+            XmlDocument document = new();
+            XmlSerializer serializer = new(objectToSerialize.GetType());
 
             try
             {
-                using (var ms = new MemoryStream())
-                {
-                    ser.Serialize(ms, objectToSerialize);
-                    ms.Position = 0;
-                    document.Load(ms);
-                }
+                using MemoryStream stream = new();
+                serializer.Serialize(stream, objectToSerialize);
+                stream.Position = 0;
+                document.Load(stream);
 
                 return document;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new SerializingException("Error serializing object. See inner exception." , e);
             }
         }
 
@@ -43,20 +45,7 @@ namespace Pon.GenericXmlSerializer
         /// <returns>XML as string</returns>
         public static string ToXmlString<T>(this T objectToSerialize)
         {
-            string res = string.Empty;
-            var document = SerializeToXml(objectToSerialize);
-
-            using (var stringWriter = new StringWriter())
-            {
-                using (var xmlTextWriter = XmlWriter.Create(stringWriter))
-                {
-                    document.WriteTo(xmlTextWriter);
-                    xmlTextWriter.Flush();
-                    res = stringWriter.GetStringBuilder().ToString();
-                }
-            }
-
-            return res;
+            return objectToSerialize.ToXmlString(false);
         }
 
         /// <summary>
@@ -66,22 +55,17 @@ namespace Pon.GenericXmlSerializer
         /// <param name="objectToSerialize">The object to serialize</param>
         /// <param name="indent">bool to determine if the XML should be indented</param>
         /// <returns>XML as string indented</returns>
-        public static string ToXmlString<T>(this T objectToSerialize, bool indent = false)
+        public static string ToXmlString<T>(this T objectToSerialize, bool indent)
         {
-            string res = string.Empty;
-            var document = SerializeToXml(objectToSerialize);
+            XmlDocument document = objectToSerialize.ToXmlDocument();
 
-            using (var stringWriter = new StringWriter())
-            {
-                using (var xmlTextWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings { Indent = indent }))
-                {
-                    document.WriteTo(xmlTextWriter);
-                    xmlTextWriter.Flush();
-                    res = stringWriter.GetStringBuilder().ToString();
-                }
-            }
+            using StringWriter stringWriter = new();
+            using XmlWriter? xmlTextWriter = XmlWriter.Create(stringWriter, new XmlWriterSettings { Indent = indent });
+            document.WriteTo(xmlTextWriter);
+            xmlTextWriter.Flush();
+            string result = stringWriter.GetStringBuilder().ToString();
 
-            return res;
+            return result;
         }
 
         /// <summary>
@@ -89,27 +73,35 @@ namespace Pon.GenericXmlSerializer
         /// </summary>
         /// <typeparam name="T">Generic type of the object</typeparam>
         /// <param name="objectToSerialize">The object to serialize</param>
-        /// <param name="OutputPath">The path where the file would be placed</param>
-        public static void ToXmlFile<T>(this T objectToSerialize, string OutputPath)
+        /// <param name="outputPath">The path where the file would be placed</param>
+        public static string ToXmlFile<T>(this T objectToSerialize, string outputPath)
         {
-            var document = SerializeToXml(objectToSerialize);
-            var output = OutputPath.Split('.');
-
-            if (output[output.Length - 1] != "xml")
+            try
             {
-                OutputPath += ".xml";
-            }
+                XmlDocument document = ToXmlDocument(objectToSerialize);
+                string[] output = outputPath.Split('.');
 
-            var fs = File.Create(OutputPath);
-            using (var stringWriter = new StringWriter())
-            {
-                using (var xmlTextWriter = XmlWriter.Create(stringWriter))
+                if (output[^1] != "xml")
                 {
-                    document.WriteTo(xmlTextWriter);
-                    xmlTextWriter.Flush();
-                    var s = stringWriter.GetStringBuilder().ToString();
-                    fs.Write(System.Text.Encoding.ASCII.GetBytes(s), 0, s.Length);
+                    outputPath += ".xml";
                 }
+
+                FileStream fs = File.Create(outputPath);
+                using StringWriter stringWriter = new();
+                using XmlWriter? xmlTextWriter = XmlWriter.Create(stringWriter);
+                document.WriteTo(xmlTextWriter);
+                xmlTextWriter.Flush();
+                string result = stringWriter.GetStringBuilder().ToString();
+                fs.Write(System.Text.Encoding.ASCII.GetBytes(result), 0, result.Length);
+                return $"File saved successfully to path: {outputPath}";
+            }
+            catch(SerializingException)
+            {
+                throw;
+            }
+            catch(Exception e)
+            {
+                throw new Exception("Error saving file. See inner exception", e);
             }
         }
     }

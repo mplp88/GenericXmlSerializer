@@ -1,18 +1,26 @@
 ﻿using Pon.GenericXmlSerializer;
 using Pon.Model;
 
-List<SerializableObject> listForSerializing = new List<SerializableObject>();
+try
+{
+    List<SerializableObject>? listForSerializing = [];
 
-AddItemsToList(listForSerializing);
-Console.WriteLine(listForSerializing.ToXmlString());
-Console.WriteLine();
-Console.WriteLine(listForSerializing.ToXmlString(true));
-Console.WriteLine();
-Console.WriteLine(listForSerializing.ToXmlString(false));
-//result.ToXmlFile("C:\\test.xml");
-Console.ReadKey();
+    AddItemsToList(listForSerializing);
+    Console.WriteLine(listForSerializing.ToXmlString());
+    Console.WriteLine();
+    Console.WriteLine(listForSerializing.ToXmlString(true));
+    Console.WriteLine();
+    Console.WriteLine(listForSerializing.ToXmlString(false));
+    listForSerializing.ToXmlFile("C:\\test.xml");
+    Console.ReadKey();
+}
+catch(Exception e)
+{
+    Console.WriteLine(e.Message);
+}
 
-void AddItemsToList(List<SerializableObject> lista)
+
+static void AddItemsToList(List<SerializableObject> lista)
 {
     for (int i = 0; i < 5; i++)
     {
